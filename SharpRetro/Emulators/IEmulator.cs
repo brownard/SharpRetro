@@ -6,6 +6,7 @@ namespace SharpRetro.Emulators
   public interface IEmulator : IDisposable
   {
     void Init();
+    void Deinit();
     bool Load(IGame game);
     void Unload();
     void Run();

@@ -3,7 +3,7 @@
 namespace SharpRetro.Libretro.Cores
 {
   /// <summary>
-  /// Implmentations of this interface provide a managed wrapper for the libretro API.
+  /// Implementations of this interface provide a managed wrapper for the libretro API.
   /// </summary>
   public interface ILibretroCore
   {

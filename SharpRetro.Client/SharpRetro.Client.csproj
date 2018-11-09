@@ -67,6 +67,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Audio\NAudioOutput.cs" />
+    <Compile Include="Models\LibretroFrontend.cs" />
     <Compile Include="Models\LibretroModel.cs" />
     <Compile Include="Video\Direct3DContext.cs" />
     <Compile Include="ViewModels\AbstractNotifyPropertyChangedModel.cs" />

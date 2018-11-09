@@ -1,6 +1,8 @@
 ﻿using SharpDX.XInput;
+using SharpRetro.DirectX.GL;
 using SharpRetro.DirectX.Input;
 using SharpRetro.DirectX.Video;
+using SharpRetro.Emulators;
 using SharpRetro.Games;
 using SharpRetro.Libretro.Audio;
 using SharpRetro.Libretro.Cores;
@@ -10,21 +12,28 @@ using SharpRetro.Libretro.Input;
 using SharpRetro.Libretro.Interop;
 using SharpRetro.Libretro.Native;
 using SharpRetro.Log;
+using System;
 using System.IO;
 
 namespace SharpRetro.Client.Models
 {
   class LibretroModel
   {
-    LibretroEmulator _emulator;
+    protected ILibrary _coreLibrary;
+    protected IRenderContext _renderContext;
+    protected LibretroEmulator _emulator;
 
-    public void LoadCore(string path, ITextureProvider textureProvider, IAudioOutput audioOutput)
+    public void LoadCore(string path, ID3DContext d3dContext, IAudioOutput audioOutput)
     {
-      ILibrary library = new Library(path);
-      ILibretroCore core = new LibretroCore(library);
+      UnloadCore();
+
+      _coreLibrary = new Library(path);
+      _renderContext = new DXRenderContext(d3dContext.Device);
+
+      ILibretroCore core = new LibretroCore(_coreLibrary);
 
       string coreDirectory = Path.GetDirectoryName(path);
-      IEnvironmentHandler environment = new Environment()
+      IEnvironmentHandler environment = new Libretro.Environment.Environment()
       {
         LibretroPath = coreDirectory,
         SystemDirectory = coreDirectory,
@@ -33,12 +42,30 @@ namespace SharpRetro.Client.Models
 
       IXInputMapping mapping = GetMapping();
       XInputDevice controller1 = new XInputDevice(mapping);
-
       Input input = new Input();
       input.AddDevice(0, controller1);
 
-      _emulator = new LibretroEmulator(core, environment, new TextureOutput(textureProvider), audioOutput, input, new SafeInteropHandler(), new ConsoleLogger());
+      _emulator = new LibretroEmulator(core, environment, new TextureOutput(d3dContext, _renderContext), audioOutput, input, new ConsoleLogger());
       _emulator.Init();
+    }
+
+    public void UnloadCore()
+    {
+      if (_emulator != null)
+      {
+        _emulator.Deinit();
+        _emulator = null;
+      }
+      if (_renderContext is IDisposable disposable)
+      {
+        disposable.Dispose();
+        _renderContext = null;
+      }
+      if (_coreLibrary != null)
+      {
+        _coreLibrary.Dispose();
+        _coreLibrary = null;
+      }
     }
 
     public void Run()

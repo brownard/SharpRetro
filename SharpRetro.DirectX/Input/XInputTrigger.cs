@@ -1,4 +1,5 @@
 ﻿using SharpDX.XInput;
+using SharpRetro.Libretro.Input;
 using System;
 
 namespace SharpRetro.DirectX.Input
@@ -13,7 +14,7 @@ namespace SharpRetro.DirectX.Input
   {
     protected XInputTriggerIndex _trigger;
     protected byte _deadzone;
-    protected Func<Gamepad, byte> _triggerDelegate;
+    protected Func<Gamepad, short> _triggerDelegate;
 
     public XInputTrigger(XInputTriggerIndex trigger)
       : this(trigger, Gamepad.TriggerThreshold)
@@ -23,16 +24,12 @@ namespace SharpRetro.DirectX.Input
     {
       _trigger = trigger;
       _deadzone = deadzone;
-      _triggerDelegate = _trigger == XInputTriggerIndex.Left ? (Func<Gamepad, byte>)GetLeftTrigger : GetRightTrigger;
+      _triggerDelegate = _trigger == XInputTriggerIndex.Left ? (Func<Gamepad, short>)GetLeftTrigger : GetRightTrigger;
     }
 
     public short GetAnalog(Gamepad gamepad)
     {
-      byte value = _triggerDelegate(gamepad);
-      if (value == 0)
-        return 0;
-      //Scale byte to short
-      return (short)(((value << 8) | value) >> 1);
+      return _triggerDelegate(gamepad);
     }
 
     public bool IsPressed(Gamepad gamepad)
@@ -40,14 +37,14 @@ namespace SharpRetro.DirectX.Input
       return _triggerDelegate(gamepad) != 0;
     }
 
-    protected byte GetLeftTrigger(Gamepad gamepad)
+    protected short GetLeftTrigger(Gamepad gamepad)
     {
-      return gamepad.LeftTrigger > _deadzone ? gamepad.LeftTrigger : (byte)0;
+      return gamepad.LeftTrigger > _deadzone ? InputUtils.Scale(gamepad.LeftTrigger) : InputUtils.FALSE;
     }
 
-    protected byte GetRightTrigger(Gamepad gamepad)
+    protected short GetRightTrigger(Gamepad gamepad)
     {
-      return gamepad.RightTrigger > _deadzone ? gamepad.RightTrigger : (byte)0;
+      return gamepad.RightTrigger > _deadzone ? InputUtils.Scale(gamepad.RightTrigger) : InputUtils.FALSE;
     }
   }
 }

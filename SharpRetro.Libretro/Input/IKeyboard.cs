@@ -7,7 +7,7 @@ using SharpRetro.Libretro.Cores;
 
 namespace SharpRetro.Libretro.Input
 {
-  public interface IKeyboard : IInputDevice
+  public interface IKeyboard
   {
     bool IsKeyPressed(RETRO_KEY key);
   }

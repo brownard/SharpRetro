@@ -11,6 +11,19 @@ namespace SharpRetro.Libretro.Native
 
     public Library(string dllPath)
     {
+      LoadLibrary(dllPath);
+    }
+
+    public Delegate GetProcDelegate(string procName, Type type)
+    {
+      IntPtr ptr = GetProcAddress(procName);
+      if (ptr == IntPtr.Zero)
+        return null;
+      return Marshal.GetDelegateForFunctionPointer(ptr, type);
+    }
+
+    protected void LoadLibrary(string dllPath)
+    {
       //try to locate dlls in the current directory (for libretro cores)
       //this isnt foolproof but its a little better than nothing
       string path = System.Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
@@ -19,7 +32,7 @@ namespace SharpRetro.Libretro.Native
         string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         string dllDirectory = Path.GetDirectoryName(dllPath);
         string alteredPath = string.Format("{0};{1};{2}", assemblyDirectory, dllDirectory, path);
-        System.Environment.SetEnvironmentVariable("PATH", alteredPath, EnvironmentVariableTarget.Process);        
+        System.Environment.SetEnvironmentVariable("PATH", alteredPath, EnvironmentVariableTarget.Process);
         _hModule = NativeMethods.LoadLibrary(dllPath);
         if (_hModule.IsInvalid)
         {
@@ -33,7 +46,7 @@ namespace SharpRetro.Libretro.Native
       }
     }
 
-    public IntPtr GetProcAddress(string procName)
+    protected IntPtr GetProcAddress(string procName)
     {
       return NativeMethods.GetProcAddress(_hModule, procName);
     }

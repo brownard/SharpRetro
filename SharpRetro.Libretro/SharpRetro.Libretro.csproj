@@ -73,15 +73,13 @@
     <Compile Include="Environment\SystemInfo.cs" />
     <Compile Include="Environment\Timing.cs" />
     <Compile Include="Environment\Variable.cs" />
-    <Compile Include="Input\IAnalog.cs" />
     <Compile Include="Input\IInput.cs" />
     <Compile Include="Input\IInputDevice.cs" />
     <Compile Include="Input\IKeyboard.cs" />
     <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\InputUtils.cs" />
     <Compile Include="Input\IPointer.cs" />
-    <Compile Include="Input\IPollable.cs" />
     <Compile Include="Input\IRetroPad.cs" />
-    <Compile Include="Input\IRumble.cs" />
     <Compile Include="Interop\SafeInteropHandler.cs" />
     <Compile Include="Log\Sprintf.cs" />
     <Compile Include="Native\ILibrary.cs" />

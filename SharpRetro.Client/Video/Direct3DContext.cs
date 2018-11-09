@@ -37,16 +37,16 @@ namespace SharpRetro.Client.Video
       get { return _device; }
     }
 
-    public Texture GetTexture(int width, int height, int pitch)
+    public Texture GetTexture(int width, int height, Usage usage)
     {
       if (_texture != null)
       {
         SurfaceDescription surface = _texture.GetLevelDescription(0);
-        if (surface.Width >= width && surface.Height >= height)
+        if (surface.Width >= width && surface.Height >= height && surface.Usage == usage)
           return _texture;
         _texture.Dispose();
       }
-      _texture = new Texture(_device, width, height, 1, Usage.Dynamic, Format.X8R8G8B8, Pool.Default);
+      _texture = new Texture(_device, width, height, 1, usage, Format.X8R8G8B8, Pool.Default);
       return _texture;
     }
 

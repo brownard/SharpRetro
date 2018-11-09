@@ -86,10 +86,10 @@ namespace SharpRetro.Libretro.Cores
     protected void AttachEntryPoint(FieldInfo entryPoint)
     {
       LibretroAttribute attribute = entryPoint.GetCustomAttribute<LibretroAttribute>();
-      IntPtr entry = _library.GetProcAddress(attribute.EntryPoint);
-      if (entry == IntPtr.Zero)
+      Delegate dlgt = _library.GetProcDelegate(attribute.EntryPoint, entryPoint.FieldType);
+      if (dlgt == null)
         throw new Exception($"Unable to attach to entry point {entryPoint.Name}");
-      entryPoint.SetValue(this, Marshal.GetDelegateForFunctionPointer(entry, entryPoint.FieldType));
+      entryPoint.SetValue(this, dlgt);
     }
 
     protected IEnumerable<FieldInfo> GetAllEntryPoints()

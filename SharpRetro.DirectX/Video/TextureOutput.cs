@@ -5,32 +5,21 @@ using SharpRetro.Libretro.Cores;
 using SharpRetro.Libretro.Environment;
 using SharpRetro.Libretro.Video;
 using System;
-using System.Runtime.InteropServices;
 
 namespace SharpRetro.DirectX.Video
 {
   public class TextureOutput : IVideoOutput
   {
-    protected ITextureProvider _textureProvider;
+    protected ID3DContext _textureProvider;
     protected IRenderContext _renderContext;
     protected RETRO_PIXEL_FORMAT _pixelFormat = RETRO_PIXEL_FORMAT.XRGB1555; //Default libretro pixel format
     protected Geometry _geometry;
     protected Timing _timing;
 
-    protected retro_hw_get_current_framebuffer_t _getCurrentFramebufferDlgt;
-    protected retro_hw_get_proc_address_t _getProcAddressDlgt;
-
-    public TextureOutput()
-    {
-      _getCurrentFramebufferDlgt = new retro_hw_get_current_framebuffer_t(GetCurrentFrameBuffer);
-      _getProcAddressDlgt = new retro_hw_get_proc_address_t(GetProcAddress);
-    }
-
-    public TextureOutput(ITextureProvider textureProvider)
-      : this()
+    public TextureOutput(ID3DContext textureProvider, IRenderContext renderContext)
     {
       _textureProvider = textureProvider;
-      _renderContext = new FBORenderContextProvider();
+      _renderContext = renderContext;
     }
 
     public bool SetPixelFormat(RETRO_PIXEL_FORMAT pixelFormat)
@@ -47,6 +36,11 @@ namespace SharpRetro.DirectX.Video
       }
     }
 
+    public bool TrySetHardwareRenderer(ref retro_hw_render_callback renderCallback)
+    {
+      return _renderContext != null && _renderContext.Init(ref renderCallback);
+    }
+
     public void SetGeometry(Geometry geometry)
     {
       _geometry = geometry;
@@ -60,27 +54,14 @@ namespace SharpRetro.DirectX.Video
 
     public void OnFramebufferReady(int width, int height, int pitch)
     {
-      Texture texture = _textureProvider?.GetTexture(width, height, pitch);
-      if (texture != null)
-        _renderContext?.OnFramebufferReady(texture);
+      _renderContext?.OnFramebufferReady(_textureProvider, width, height, pitch);
     }
 
     public void OnVideoRefresh(IntPtr data, int width, int height, int pitch)
     {
-      Texture texture = _textureProvider?.GetTexture(width, height, pitch);
+      Texture texture = _textureProvider?.GetTexture(width, height, Usage.Dynamic);
       if (texture != null)
         WriteToTexture(texture, data, width, height, pitch);
-    }
-
-    public bool TrySetHardwareRenderer(ref retro_hw_render_callback renderCallback)
-    {
-      if (_renderContext == null)
-        return false;
-
-      _renderContext.Init(renderCallback);
-      renderCallback.get_current_framebuffer = Marshal.GetFunctionPointerForDelegate(_getCurrentFramebufferDlgt);
-      renderCallback.get_proc_address = Marshal.GetFunctionPointerForDelegate(_getProcAddressDlgt);
-      return true;
     }
 
     protected void WriteToTexture(Texture texture, IntPtr data, int width, int height, int pitch)
@@ -94,16 +75,6 @@ namespace SharpRetro.DirectX.Video
       {
         texture.UnlockRectangle(0);
       }
-    }
-
-    protected uint GetCurrentFrameBuffer()
-    {
-      return _renderContext != null ? _renderContext.GetCurrentFramebuffer() : 0;
-    }
-
-    protected IntPtr GetProcAddress(IntPtr sym)
-    {
-      return _renderContext != null ? _renderContext.GetProcAddress(sym) : IntPtr.Zero;
     }
   }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SharpDX.XInput;
+using SharpRetro.Libretro.Input;
 
 namespace SharpRetro.DirectX.Input
 {
@@ -23,7 +24,7 @@ namespace SharpRetro.DirectX.Input
 
     public short GetAnalog(Gamepad gamepad)
     {
-      return (short)(gamepad.Buttons.HasFlag(_button) ? short.MaxValue : 0); 
+      return gamepad.Buttons.HasFlag(_button) ? InputUtils.MAX : InputUtils.FALSE;
     }
   }
 }

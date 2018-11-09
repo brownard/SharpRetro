@@ -5,7 +5,7 @@ using System;
 
 namespace SharpRetro.DirectX.Input
 {
-  public class XInputDevice : IPollable, IRetroPad, IAnalog, IRumble
+  public class XInputDevice : IRetroPad
   {
     //Constantly polling a disconnected controller causes high CPU load so
     //reduce polling to the specified interval if the controller becomes disconnected

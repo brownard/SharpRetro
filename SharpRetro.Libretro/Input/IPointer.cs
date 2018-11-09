@@ -7,7 +7,7 @@ using SharpRetro.Libretro.Cores;
 
 namespace SharpRetro.Libretro.Input
 {
-  public interface IPointer : IInputDevice
+  public interface IPointer
   {
     short GetPointerX();
     short GetPointerY();

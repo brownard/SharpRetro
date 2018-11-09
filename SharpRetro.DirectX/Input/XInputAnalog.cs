@@ -1,4 +1,5 @@
 ﻿using SharpDX.XInput;
+using SharpRetro.Libretro.Input;
 using System;
 
 namespace SharpRetro.DirectX.Input
@@ -55,42 +56,42 @@ namespace SharpRetro.DirectX.Input
 
     protected short GetLeftThumbXPositive(Gamepad gamepad)
     {
-      return gamepad.LeftThumbX > _deadzone ? gamepad.LeftThumbX : (short)0;
+      return gamepad.LeftThumbX > _deadzone ? gamepad.LeftThumbX : InputUtils.FALSE;
     }
 
     protected short GetLeftThumbXNegative(Gamepad gamepad)
     {
-      return gamepad.LeftThumbX < -_deadzone ? gamepad.LeftThumbX : (short)0;
+      return gamepad.LeftThumbX < -_deadzone ? gamepad.LeftThumbX : InputUtils.FALSE;
     }
 
     protected short GetLeftThumbYPositive(Gamepad gamepad)
     {
-      return gamepad.LeftThumbY > _deadzone ? gamepad.LeftThumbY : (short)0;
+      return gamepad.LeftThumbY > _deadzone ? gamepad.LeftThumbY : InputUtils.FALSE;
     }
 
     protected short GetLeftThumbYNegative(Gamepad gamepad)
     {
-      return gamepad.LeftThumbY < -_deadzone ? gamepad.LeftThumbY : (short)0;
+      return gamepad.LeftThumbY < -_deadzone ? gamepad.LeftThumbY : InputUtils.FALSE;
     }
 
     protected short GetRightThumbXPositive(Gamepad gamepad)
     {
-      return gamepad.RightThumbX > _deadzone ? gamepad.RightThumbX : (short)0;
+      return gamepad.RightThumbX > _deadzone ? gamepad.RightThumbX : InputUtils.FALSE;
     }
 
     protected short GetRightThumbXNegative(Gamepad gamepad)
     {
-      return gamepad.RightThumbX < -_deadzone ? gamepad.RightThumbX : (short)0;
+      return gamepad.RightThumbX < -_deadzone ? gamepad.RightThumbX : InputUtils.FALSE;
     }
 
     protected short GetRightThumbYPositive(Gamepad gamepad)
     {
-      return gamepad.RightThumbY > _deadzone ? gamepad.RightThumbY : (short)0;
+      return gamepad.RightThumbY > _deadzone ? gamepad.RightThumbY : InputUtils.FALSE;
     }
 
     protected short GetRightThumbYNegative(Gamepad gamepad)
     {
-      return gamepad.RightThumbY < -_deadzone ? gamepad.RightThumbY : (short)0;
+      return gamepad.RightThumbY < -_deadzone ? gamepad.RightThumbY : InputUtils.FALSE;
     }
   }
 }

@@ -59,12 +59,15 @@
   <ItemGroup>
     <Compile Include="Audio\DirectSoundOutput.cs" />
     <Compile Include="GL\AbstractBuffer.cs" />
+    <Compile Include="GL\DXRenderContextProvider.cs" />
+    <Compile Include="GL\FBORenderContextProvider.cs" />
     <Compile Include="GL\Framebuffer.cs" />
+    <Compile Include="GL\OpenGLEx.cs" />
     <Compile Include="GL\Renderbuffer.cs" />
     <Compile Include="GL\Scene.cs" />
+    <Compile Include="GL\SharedTexture.cs" />
     <Compile Include="GL\Texture2d.cs" />
-    <Compile Include="GL\DxRenderContextProvider.cs" />
-    <Compile Include="GL\FBORenderContextProvider.cs" />
+    <Compile Include="GL\DXRenderContext.cs" />
     <Compile Include="GL\IRenderContext.cs" />
     <Compile Include="Input\IXInputMapping.cs" />
     <Compile Include="Input\XInputAnalog.cs" />
@@ -73,7 +76,7 @@
     <Compile Include="Input\XInputMapping.cs" />
     <Compile Include="Input\XInputTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Video\ITextureProvider.cs" />
+    <Compile Include="Video\ID3DContext.cs" />
     <Compile Include="Video\TextureOutput.cs" />
     <Compile Include="Video\VideoBlitter.cs" />
   </ItemGroup>

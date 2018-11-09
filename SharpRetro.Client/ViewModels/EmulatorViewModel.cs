@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace SharpRetro.Client.ViewModels
 {
-  class EmulatorViewModel : ITextureProvider, IDisposable
+  class EmulatorViewModel : ID3DContext, IDisposable
   {
     Direct3DContext _d3dContext;
     LibretroModel _libretro;
@@ -27,7 +27,10 @@ namespace SharpRetro.Client.ViewModels
     public void InitDirect3D(IntPtr controlHandle)
     {
       if (_d3dContext == null)
+      {
         _d3dContext = Direct3DContext.Create(controlHandle);
+        InitLibretro();
+      }
     }
 
     public void Run()
@@ -44,19 +47,23 @@ namespace SharpRetro.Client.ViewModels
       return IntPtr.Zero;
     }
 
-    public Texture GetTexture(int width, int height, int pitch)
+    public Device Device
+    {
+      get { return _d3dContext?.Device; }
+    }
+
+    public Texture GetTexture(int width, int height, Usage usage)
     {
       if (_d3dContext == null)
         return null;
-      return _d3dContext.GetTexture(width, height, pitch);
-    }
-
-    public void Render(IntPtr pixels, bool bottomLeftOrigin)
-    {
+      return _d3dContext.GetTexture(width, height, usage);
     }
 
     public void Dispose()
     {
+      if (_libretro != null)
+        _libretro.UnloadCore();
+
       if (_d3dContext != null)
       {
         _d3dContext.Dispose();

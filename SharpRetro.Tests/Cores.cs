@@ -25,6 +25,12 @@ namespace SharpRetro.Tests
   public class Cores
   {
     [Test]
+    public void TestCoreEntryPointInit()
+    {
+      var library = new Mock<ILibrary>();
+    }
+
+    [Test]
     public void TestCoreInit()
     {
       string coreDirectory = @"E:\Games\Cores";
@@ -51,7 +57,7 @@ namespace SharpRetro.Tests
       input.Setup(i => i.OnInputState(It.IsAny<uint>(), It.IsAny<uint>(), It.IsAny<uint>(), It.IsAny<uint>())).Returns(0);
       input.Setup(i => i.TrySetRumbleInterface(ref It.Ref<retro_rumble_interface>.IsAny)).Returns(false);
 
-      IEmulator emulator = new LibretroEmulator(core, environment, new TextureOutput(), audio.Object, input.Object, new UnsafeInteropHandler(), new ConsoleLogger());
+      IEmulator emulator = new LibretroEmulator(core, environment, new TextureOutput(null, null), audio.Object, input.Object, new ConsoleLogger());
       emulator.Init();
 
       IGame game = new Game { Path = gamePath, Data = File.ReadAllBytes(gamePath) };

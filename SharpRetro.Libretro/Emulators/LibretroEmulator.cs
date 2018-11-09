@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 namespace SharpRetro.Libretro.Emulators
 {
   /// <summary>
-  /// 
+  /// Manages interaction between a core and input/output devices.
   /// </summary>
   public unsafe class LibretroEmulator : IEmulator
   {
@@ -31,21 +31,34 @@ namespace SharpRetro.Libretro.Emulators
     protected Geometry _geometry;
     protected Timing _timing;
     protected retro_system_av_info _avInfo;
-
+    
+    /// <summary>
+    /// Creates a new instance of a frontend using the specified IO interfaces.
+    /// </summary>
+    /// <param name="core">The libretro core to load.</param>
+    /// <param name="environment">The <see cref="IEnvironmentHandler"/> to use to handle environment messages from the core.</param>
+    /// <param name="videoOutput">The <see cref="IVideoOutput"/> to use for video and render callbacks.</param>
+    /// <param name="audioOutput">The <see cref="IAudioOutput"/> to use for audio callbacks.</param>
+    /// <param name="input">The <see cref="IInput"/> to use for input callbacks.</param>
+    /// <param name="logger">The <see cref="ILogger"/> to use for log callbacks.</param>
     public LibretroEmulator(ILibretroCore core, IEnvironmentHandler environment, IVideoOutput videoOutput, IAudioOutput audioOutput,
-      IInput input, IInteropHandler interop, ILogger logger)
+      IInput input, ILogger logger)
     {
       _core = core;
       _environment = environment;
       _videoOutput = videoOutput;
       _audioOutput = audioOutput;
       _input = input;
-      _interop = interop;
       _logger = logger;
+
+      _interop = new UnsafeInteropHandler();
     }
 
     #region Init
 
+    /// <summary>
+    /// Initializes the callbacks and the core itself.
+    /// </summary>
     protected void InitCore()
     {
       InitInterfaces();
@@ -72,11 +85,18 @@ namespace SharpRetro.Libretro.Emulators
 
     #region System/AV info
 
+    /// <summary>
+    /// The current system info. Will be populated after a
+    /// call to <see cref="GetSystemInfo"/>. 
+    /// </summary>
     public SystemInfo SystemInfo
     {
       get { return _systemInfo; }
     }
 
+    /// <summary>
+    /// The current geometry of the game. 
+    /// </summary>
     public Geometry Geometry
     {
       get { return _geometry; }
@@ -328,6 +348,11 @@ namespace SharpRetro.Libretro.Emulators
     {
       InitCore();
       GetSystemInfo();
+    }
+
+    public void Deinit()
+    {
+      _core.Deinit();
     }
 
     public bool Load(IGame game)

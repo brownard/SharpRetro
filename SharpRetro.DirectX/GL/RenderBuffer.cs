@@ -26,7 +26,5 @@ namespace SharpRetro.DirectX.GL
     {
       _gl.DeleteFramebuffersEXT(1, new uint[] { id });
     }
-
-
   }
 }

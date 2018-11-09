@@ -1,5 +1,6 @@
 ﻿using SharpRetro.Client.ViewModels;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -18,7 +19,6 @@ namespace SharpRetro.Client
       InitializeComponent();
 
       _emulatorViewModel = new EmulatorViewModel();
-      _emulatorViewModel.InitLibretro();
       CompositionTarget.Rendering += OnRetroRender;
     }
 
@@ -39,6 +39,12 @@ namespace SharpRetro.Client
         d3dimg.AddDirtyRect(dirtyRect);
         d3dimg.Unlock();
       }
+    }
+
+    protected override void OnClosing(CancelEventArgs e)
+    {
+      _emulatorViewModel.Dispose();
+      base.OnClosing(e);
     }
   }
 }

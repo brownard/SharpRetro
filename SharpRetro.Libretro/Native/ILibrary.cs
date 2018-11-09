@@ -4,6 +4,6 @@ namespace SharpRetro.Libretro.Native
 {
   public interface ILibrary : IDisposable
   {
-    IntPtr GetProcAddress(string procName);
+    Delegate GetProcDelegate(string procName, Type type);
   }
 }

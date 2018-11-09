@@ -8,5 +8,6 @@ namespace SharpRetro.Libretro.Input
 {
   public interface IInputDevice
   {
+    void Poll();
   }
 }

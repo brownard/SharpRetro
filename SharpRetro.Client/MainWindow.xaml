@@ -7,11 +7,18 @@
         xmlns:i="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+  <DockPanel>
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Open"/>
+        <MenuItem Header="_Close"/>
+        <MenuItem Header="_Save"/>
+      </MenuItem>
+    </Menu>
     <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
       <Image.Source>
         <i:D3DImage x:Name="d3dimg" />
       </Image.Source>
     </Image>
-    </Grid>
+  </DockPanel>
 </Window>
