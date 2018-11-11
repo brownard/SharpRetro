@@ -56,7 +56,8 @@
     <Compile Include="Logging\LogInterfaceHandler.cs" />
     <Compile Include="Logging\Sprintf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Video\IHardwareRender.cs" />
+    <Compile Include="Video\IHardwareRenderer.cs" />
+    <Compile Include="Video\ISoftwareRenderer.cs" />
     <Compile Include="Video\IVideoOutput.cs" />
     <Compile Include="Video\RenderCallbackHandler.cs" />
     <Compile Include="Video\VideoOutput.cs" />

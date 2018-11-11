@@ -11,14 +11,14 @@ namespace SharpRetro.Frontend.Video
 {
   public class RenderCallbackHandler : IEnvironmentHandler
   {
-    IHardwareRender _render;
+    IHardwareRenderer _renderer;
 
     protected retro_hw_get_current_framebuffer_t _getCurrentFramebufferDlgt;
     protected retro_hw_get_proc_address_t _getProcAddressDlgt;
 
-    public RenderCallbackHandler(IHardwareRender render)
+    public RenderCallbackHandler(IHardwareRenderer renderer)
     {
-      _render = render;
+      _renderer = renderer;
       _getCurrentFramebufferDlgt = new retro_hw_get_current_framebuffer_t(OnGetCurrentFramebuffer);
       _getProcAddressDlgt = new retro_hw_get_proc_address_t(OnGetProcAddress);
     }
@@ -41,21 +41,21 @@ namespace SharpRetro.Frontend.Video
         renderCallback->get_current_framebuffer = Marshal.GetFunctionPointerForDelegate(_getCurrentFramebufferDlgt);
         renderCallback->get_proc_address = Marshal.GetFunctionPointerForDelegate(_getProcAddressDlgt);
         if (renderCallback->context_reset != IntPtr.Zero)
-          _render.SetContextReset(Marshal.GetDelegateForFunctionPointer<retro_hw_context_reset_t>(renderCallback->context_reset));
+          _renderer.SetContextReset(Marshal.GetDelegateForFunctionPointer<retro_hw_context_reset_t>(renderCallback->context_reset));
         if (renderCallback->context_destroy != IntPtr.Zero)
-          _render.SetContextDestroy(Marshal.GetDelegateForFunctionPointer<retro_hw_context_reset_t>(renderCallback->context_destroy));
+          _renderer.SetContextDestroy(Marshal.GetDelegateForFunctionPointer<retro_hw_context_reset_t>(renderCallback->context_destroy));
       }
       return true;
     }
 
     protected uint OnGetCurrentFramebuffer()
     {
-      return _render.GetCurrentFramebuffer();
+      return _renderer.GetCurrentFramebuffer();
     }
 
     protected IntPtr OnGetProcAddress(IntPtr symbol)
     {
-      return _render.GetProcAddress(symbol);
+      return _renderer.GetProcAddress(symbol);
     }
   }
 }
