@@ -79,7 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cores.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="Mock\MockLibrary.cs" />
+    <Compile Include="Native.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +91,10 @@
     <ProjectReference Include="..\SharpRetro.DirectX\SharpRetro.DirectX.csproj">
       <Project>{942A2FE4-12D5-43EB-AB82-4C02AF98BD6A}</Project>
       <Name>SharpRetro.DirectX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRetro.Frontend\SharpRetro.Frontend.csproj">
+      <Project>{C8B03EA0-04FF-4F70-A7CA-D09723C10F7B}</Project>
+      <Name>SharpRetro.Frontend</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRetro.Libretro\SharpRetro.Libretro.csproj">
       <Project>{b67a74a4-b8db-4e76-b47d-9709b31d9365}</Project>
